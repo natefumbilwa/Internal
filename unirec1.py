@@ -1,5 +1,3 @@
-# Iteration 1: Simplest Version (Command-line input/output)
-
 # Define a dictionary of courses and their minimum GPA requirements
 courses = {
     "Computer Science": {"GPA": 85, "Link": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/computer-science.html"},
@@ -8,8 +6,10 @@ courses = {
     "Arts": {"GPA": 50, "Link": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-arts-ba.html"},
     "Education": {"GPA": 40, "Link": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-education-teaching-bedtchg.html"}
 }
-#p
+#Define a function that takes a name and a GPA as parameters and returns a message with recommendations
 def get_recommendations(name, gpa):
+
+    #Check the GPA range and assign a corresponding message
     if gpa >= 85:
         message = f"Hello {name}, you have an excellent GPA. You can apply for any course you want."
     elif gpa >= 75:
@@ -31,15 +31,20 @@ def get_recommendations(name, gpa):
 
 def main():
     print("Welcome to Course Recommendation System!")
+    
+    #Ask the user to input their name and GPA
     name = input("Enter Your Name: ")
     gpa = float(input("Enter Your Highschool GPA: "))
 
     # Check if the GPA is valid
     if gpa < 0 or gpa > 100:
         print("Invalid GPA. Please enter a number between 0 and 100.")
+
+     # Call the function to get the recommendations and print them    
     else:
         recommendations = get_recommendations(name, gpa)
         print(recommendations)
 
+# Run the main function if this file is executed
 if __name__ == "__main__":
     main()

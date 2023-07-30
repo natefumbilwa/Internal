@@ -1,8 +1,11 @@
 import PySimpleGUI as sg
 import csv
 
+# Define a class for the Course Recommendation App
 class CourseRecommendationApp:
     def __init__(self):
+
+        # Dictionary containing course information with GPA requirements and links
         self.courses = {
             "Computer Science": {"GPA": 85, "Link": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/computer-science.html"},
             "Engineering": {"GPA": 75, "Link": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-engineering-honours-behons.html"},
@@ -13,6 +16,8 @@ class CourseRecommendationApp:
             "Health Sciences": {"GPA": 65, "Link": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-health-sciences-bhsc.html"},
             "Law": {"GPA": 80, "Link": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-laws-llb.html"}
         }
+        
+        # Dictionary containing course descriptions
         self.descriptions = {
             "Computer Science": "Computer science is the study of computation and information. It involves the design, analysis, implementation, and application of algorithms, data structures, programming languages, software systems, and hardware devices.",
             "Engineering": "Engineering is the application of science, mathematics, and technology to create solutions for various problems in society. It involves the design, construction, testing, and maintenance of structures, machines, systems, and processes.",
@@ -24,17 +29,23 @@ class CourseRecommendationApp:
             "Law": "Law is the system of rules and regulations that govern society and protect individual rights. It involves the interpretation, application, and enforcement of legal principles and statutes.",
 }
 
+        # List of broad interests available for selection
         self.interests = ["Computer Science", "Engineering", "Business", "Arts", "Education", "Science", "Health Sciences", "Law"]
+        
+        # File name for storing user data
         self.csv_file = 'user_data.csv'
 
+    # Saves the user data to a CSV file
     def save_user_data(self, name, gpa, selected_interests):
         with open(self.csv_file, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([name, gpa, ', '.join(selected_interests)])
 
+    # Checks if the entered name is valid
     def is_valid_name(self, name):
         return name.strip() != ""
 
+    # Checks if the entered GPA is a valid float between 0 and 100
     def is_valid_gpa(self, gpa):
         try:
             gpa = float(gpa)
@@ -42,15 +53,18 @@ class CourseRecommendationApp:
         except ValueError:
             return False
 
+    # Filters courses based on the entered GPA and selected interests
     def get_filtered_courses(self, gpa, selected_interests):
         if not selected_interests:
             return {course: info for course, info in self.courses.items() if gpa >= info["GPA"]}
         else:
             return {course: info for course, info in self.courses.items() if course in selected_interests and gpa >= info["GPA"]}
 
+    # Starts the application by creating the first window
     def run(self):
         self.create_first_window()
 
+    # Creates the initial window for data collection
     def create_first_window(self):
         layout = [
             [sg.Text('Enter Your Name:  '), sg.InputText(key='-NAME-')],
@@ -83,16 +97,20 @@ class CourseRecommendationApp:
             if gpa < 0 or gpa > 100:
                 sg.popup("Invalid GPA. Please enter a number between 0 and 100.")
             else:
+                # Proceed to display the course recommendations
                 self.display_course_recommendations(name, gpa, selected_interests)
 
+            # Save the user data
             self.save_user_data(name, gpa, selected_interests)
 
         window.close()
 
+    # Displays course recommendations based on the user's GPA and interests
     def display_course_recommendations(self, name, gpa, selected_interests):
         filtered_courses = self.get_filtered_courses(gpa, selected_interests)
         message = ""
 
+        # Generate a recommendation message based on GPA
         if gpa >= 85:
             message = f"Hello {name}, you have an excellent GPA. You can apply for any course you want."
         elif gpa >= 75:
@@ -104,6 +122,7 @@ class CourseRecommendationApp:
         else:
             message = f"Hello {name}, you have a very low GPA. You may not be eligible for any university courses."
 
+        # Generate buttons or text for each eligible course
         layout = [[sg.Text(message)]]
         for course, info in self.courses.items():
             if gpa >= info["GPA"]:
@@ -119,12 +138,14 @@ class CourseRecommendationApp:
             if event in (None, 'Cancel'):
                 break
 
+            # Show a popup with course information when a course button is clicked
             if event in filtered_courses:
                 course_info = f"{event}: {self.descriptions[event]}\n\nApply at: {filtered_courses[event]['Link']}"
                 sg.popup(course_info)
 
         window.close()
 
+# Entry point of the application
 if __name__ == "__main__":
     app = CourseRecommendationApp()
     app.run()

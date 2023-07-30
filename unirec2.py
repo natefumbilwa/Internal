@@ -1,5 +1,3 @@
-# Iteration 2: Basic GUI
-
 import PySimpleGUI as sg
 
 # Define a dictionary of courses and their minimum GPA requirements
@@ -11,7 +9,10 @@ courses = {
     "Education": {"GPA": 40, "Link": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-education-teaching-bedtchg.html"}
 }
 
+# Define a function that takes a name and a GPA as parameters and returns a message with recommendations
 def get_recommendations(name, gpa):
+    
+    # Check the GPA range and assign a corresponding message
     if gpa >= 85:
         message = f"Hello {name}, you have an excellent GPA. You can apply for any course you want."
     elif gpa >= 75:
@@ -47,17 +48,18 @@ def main():
 
         if event in (None, 'Cancel'):
             break
-
+        
+        # Check if the input is valid
         name = values['-NAME-']
         gpa = float(values['-GPA-'])
-
         if gpa < 0 or gpa > 100:
-            sg.popup("Invalid GPA. Please enter a number between 0 and 4.")
+            sg.popup("Invalid GPA. Please enter a number between 0 and 100.")
         else:
             recommendations = get_recommendations(name, gpa)
             print(recommendations)
 
     window.close()
 
+# Run the main function if this file is executed
 if __name__ == "__main__":
     main()

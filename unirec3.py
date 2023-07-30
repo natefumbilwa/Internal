@@ -33,6 +33,7 @@ while True:
         break
     name = values1['-NAME-']
     gpa = float(values1['-GPA-'])
+    
     # Check if the GPA is valid
     if gpa < 0 or gpa > 100:
         sg.popup("Invalid GPA. Please enter a number between 0 and 100.")
